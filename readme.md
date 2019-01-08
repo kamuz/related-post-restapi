@@ -2,4 +2,3 @@
 
 Demo:
 
-![Demo](demo.gif)
