@@ -38,7 +38,6 @@ add_action( 'wp_enqueue_scripts', 'kmzrelrest_css_js' );
  */
 function kmzrelrest_display( $content ){
     if( is_single() && is_main_query() ) {
-        $content .= '<a href="' . kmzrelrest_get_json_query() . '">' . kmzrelrest_get_json_query() . '</a>';
         $content .= '<section id="related-posts" class="related-posts">';
         $content .= '<a href="#" class="get-related-posts">Get related posts</a>';
         $content .= '<div class="ajax-loader"><img src="' . plugin_dir_url( __FILE__ ) . 'css/spinner.svg" width="32" height="32" /></div>';
