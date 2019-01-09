@@ -194,3 +194,49 @@ function kmzrelrest_css_js() {
     }
 }
 ```
+
+В WordPress есть функция `wp_localize_script()`, которая как правило используется для того чтобы передавать переменные перевода в JavaScript, но в нашем случае эта функция удобна тем что с её помощью мы можем передавать данные из PHP в наш JavaScript файл, например URL для REST API и любую другую информацию. Данная функция принимает три параметра: идентификатор подключённого JavaScript файла, префикс передаваемый в переменную и массив передаваемых данных.
+
+Передадим созданные ранее URL и ID текущего поста:
+
+*wp-content/plugins/kmz-related-posts-restapi/kmz-related-posts-restapi.php*
+
+```php
+/**
+ * Load CSS and JavaScript files
+ */
+function kmzrelrest_css_js() {
+    if( is_single() && is_main_query() ) {
+        // Get plugin styles
+        wp_enqueue_style( 'kmzrelres_main_css', plugin_dir_url(__FILE__) . 'css/style.css', '0.1', 'all' );
+        wp_enqueue_script( 'kmzrelres_main_js', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), '0.1', true );
+
+        global $post;
+        $post_id = $post->ID;
+
+        // Send data to JavaScript
+        wp_localize_script('kmzrelres_main_js', 'postdata',
+            array(
+                'json_url' => kmzrelrest_get_json_query(),
+                'post_id' => $post_id
+            )
+        );
+    }
+}
+```
+
+Теперь выведем эти данные в консоль при клике:
+
+*wp-content/plugins/kmz-related-posts-restapi/js/script.js*
+
+```js
+(function($){
+    $('.get-related-posts').on('click', function(event){
+        event.preventDefault();
+        var jsonUrl = postdata.json_url;
+        var postId = postdata.post_id;
+        console.log(jsonUrl);
+        console.log(postId);
+    })
+})(jQuery);
+```

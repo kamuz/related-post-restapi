@@ -18,6 +18,17 @@ function kmzrelrest_css_js() {
         // Get plugin styles
         wp_enqueue_style( 'kmzrelres_main_css', plugin_dir_url(__FILE__) . 'css/style.css', '0.1', 'all' );
         wp_enqueue_script( 'kmzrelres_main_js', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), '0.1', true );
+
+        global $post;
+        $post_id = $post->ID;
+
+        // Send data to JavaScript
+        wp_localize_script('kmzrelres_main_js', 'postdata',
+            array(
+                'json_url' => kmzrelrest_get_json_query(),
+                'post_id' => $post_id
+            )
+        );
     }
 }
 add_action( 'wp_enqueue_scripts', 'kmzrelrest_css_js' );
