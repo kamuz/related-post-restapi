@@ -41,7 +41,7 @@ function kmzrelrest_display( $content ){
         $content .= '<section id="related-posts" class="related-posts">';
         $content .= '<a href="#" class="get-related-posts">Get related posts</a>';
         $content .= '<div class="ajax-loader"><img src="' . plugin_dir_url( __FILE__ ) . 'css/spinner.svg" width="32" height="32" /></div>';
-        $content .= '</section><!-- .related-posts -->';
+        $content .= '</section>';
     }
     return $content;
 }
@@ -70,3 +70,11 @@ function kmzrelrest_get_json_query(){
 
     return $url;
 }
+
+/**
+ * Remove Read More links from all excerpts
+ */
+function custom_excerpt_more( $more ) {
+    return '…';
+}
+add_filter( 'excerpt_more', 'custom_excerpt_more', 100);
