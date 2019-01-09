@@ -26,7 +26,8 @@ add_action( 'wp_enqueue_scripts', 'kmzrelrest_css_js' );
  */
 function kmzrelrest_display($content){
     if( is_single() && is_main_query() ) {
-        $content  = '<section id="related-posts" class="related-posts">';
+        $content  = '<a href="' . kmzrelrest_get_json_query() . '">' . kmzrelrest_get_json_query() . '</a>';
+        $content .= '<section id="related-posts" class="related-posts">';
         $content .= '<a href="#" class="get-related-posts">Get related posts</a>';
         $content .= '<div class="ajax-loader"><img src="' . plugin_dir_url( __FILE__ ) . 'css/spinner.svg" width="32" height="32" /></div>';
         $content .= '</section><!-- .related-posts -->';
@@ -34,3 +35,27 @@ function kmzrelrest_display($content){
     return $content;
 }
 add_filter( 'the_content', 'kmzrelrest_display' );
+
+/**
+ * Create REST API URL
+ * - Get the current categories
+ * - Get the category IDs
+ * - Create the arguments for categories and pagination
+ * - Create URL (example - /wp-json/wp/v2/posts?categories=198,4&per_page=5)
+ */
+function kmzrelrest_get_json_query(){
+    $cats = get_the_category();
+    $cat_ids = array();
+    foreach( $cats as $cat ) {
+        $cat_ids[] = $cat->term_id;
+    }
+
+    $args = array(
+        'categories' => implode(",", $cat_ids),
+        'per_page' => 5
+    );
+
+    $url = add_query_arg( $args, rest_url('wp/v2/posts') );
+
+    return $url;
+}
