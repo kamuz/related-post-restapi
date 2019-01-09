@@ -86,3 +86,20 @@ function kmzrelrest_css_js() {
 }
 add_action( 'wp_enqueue_scripts', 'kmzrelrest_css_js' );
 ```
+
+Выведем пока что тестовый блок после контента статьи:
+
+*wp-content/plugins/kmz-related-posts-restapi/kmz-related-posts-restapi.php*
+
+```php
+/**
+ * Output HTML onto bottom of sinle post
+ */
+function kmzrelrest_display($content){
+    if( is_single() && is_main_query() ) {
+        $content .= '<h3>Hello, REST API</h3>';
+    }
+    return $content;
+}
+add_filter( 'the_content', 'kmzrelrest_display' );
+```
