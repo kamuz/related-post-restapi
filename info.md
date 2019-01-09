@@ -49,3 +49,23 @@ RESTful приложение использует ресурсы (**resources**)
 * **Single user by ID** - `GET /wp-json/wp/v2/users/1`
 * **Comments index** (10 recent) - `GET /wp-json/wp/v2/comments`
 * **10 latest comments on specific post based on post ID** - `GET /wp-json/wp/v2/comments?post=6`
+
+Чтобы найти похожие записи нам нужно подставлять посты из той же категории что и текущий пост. Для этого нам подойдёт примерно такой URL для WP REST API: `GET /wp-json/wp/v2/posts?categories=198,4&per_page=2`.
+
+В самом начале создадим хедер для основного файла плагина:
+
+*wp-content/plugins/kmz-related-posts-restapi/kmz-related-posts-restapi.php*
+
+```php
+<?php
+/*
+Plugin Name: KMZ Related Posts REST
+Description: Display links to related posts through the WP REST API
+Version: 0.1
+Author: Vladimir Kamuz
+Author URI: https://wpdev.pp.ua
+Plugin URI: https://wpdev.pp.ua/kmzrel_rest
+Licence: GPL2
+Text Domain: kmzrelrest
+*/
+```
