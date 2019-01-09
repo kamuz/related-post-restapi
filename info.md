@@ -163,7 +163,34 @@ function kmzrelrest_get_json_query(){
 ```php
 function kmzrelrest_display($content){
     if( is_single() && is_main_query() ) {
-        $content  = '<a href="' . kmzrelrest_get_json_query() . '">' . kmzrelrest_get_json_query() . '</a>';
+        $content .= '<a href="' . kmzrelrest_get_json_query() . '">' . kmzrelrest_get_json_query() . '</a>';
         $content .= '<section id="related-posts" class="related-posts">';
         //..
+```
+
+Создадим файл скриптов, в котором пока что создадим обработчик кнопки по клику:
+
+*wp-content/plugins/kmz-related-posts-restapi/js/script.js*
+
+```js
+(function($){
+    $('.get-related-posts').on('click', function(event){
+        event.preventDefault();
+        console.log("Click!!!");
+    })
+})(jQuery);
+```
+
+Подключим скрипт и проверим работу по клику:
+
+*wp-content/plugins/kmz-related-posts-restapi/kmz-related-posts-restapi.php*
+
+```php
+function kmzrelrest_css_js() {
+    if( is_single() && is_main_query() ) {
+        // Get plugin styles
+        wp_enqueue_style( 'kmzrelres_main_css', plugin_dir_url(__FILE__) . 'css/style.css', '0.1', 'all' );
+        wp_enqueue_script( 'kmzrelres_main_js', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), '0.1', true );
+    }
+}
 ```

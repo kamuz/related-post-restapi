@@ -17,6 +17,7 @@ function kmzrelrest_css_js() {
     if( is_single() && is_main_query() ) {
         // Get plugin styles
         wp_enqueue_style( 'kmzrelres_main_css', plugin_dir_url(__FILE__) . 'css/style.css', '0.1', 'all' );
+        wp_enqueue_script( 'kmzrelres_main_js', plugin_dir_url(__FILE__) . 'js/script.js', array('jquery'), '0.1', true );
     }
 }
 add_action( 'wp_enqueue_scripts', 'kmzrelrest_css_js' );
@@ -24,9 +25,9 @@ add_action( 'wp_enqueue_scripts', 'kmzrelrest_css_js' );
 /**
  * Output HTML onto bottom of sinle post
  */
-function kmzrelrest_display($content){
+function kmzrelrest_display( $content ){
     if( is_single() && is_main_query() ) {
-        $content  = '<a href="' . kmzrelrest_get_json_query() . '">' . kmzrelrest_get_json_query() . '</a>';
+        $content .= '<a href="' . kmzrelrest_get_json_query() . '">' . kmzrelrest_get_json_query() . '</a>';
         $content .= '<section id="related-posts" class="related-posts">';
         $content .= '<a href="#" class="get-related-posts">Get related posts</a>';
         $content .= '<div class="ajax-loader"><img src="' . plugin_dir_url( __FILE__ ) . 'css/spinner.svg" width="32" height="32" /></div>';
