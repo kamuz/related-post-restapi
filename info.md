@@ -69,3 +69,20 @@ Licence: GPL2
 Text Domain: kmzrelrest
 */
 ```
+
+Подключим CSS:
+
+*wp-content/plugins/kmz-related-posts-restapi/kmz-related-posts-restapi.php*
+
+```php
+/**
+ * Load CSS and JavaScript files
+ */
+function kmzrelrest_css_js() {
+    if( is_single() && is_main_query() ) {
+        // Get plugin styles
+        wp_enqueue_style( 'kmzrelres_main_css', plugin_dir_url(__FILE__) . 'css/style.css', '0.1', 'all' );
+    }
+}
+add_action( 'wp_enqueue_scripts', 'kmzrelrest_css_js' );
+```
