@@ -339,3 +339,53 @@ function custom_excerpt_more( $more ) {
 }
 add_filter( 'excerpt_more', 'custom_excerpt_more', 100);
 ```
+
+Теперь нам нужно вывести имя автора поста и изображение, но пока что у нас к этой информации нет доступа - мы имеет только ID автора и ID вложения. Чтобы получить эту информацию нам нужно немного изменить наш REST запрос добавив `_embed=true` - `GET http://wordpress.loc/wp-json/wp/v2/posts?&categories=198,4&per_page=2&_embed=true`.
+
+*wp-content/plugins/kmz-related-posts-restapi/kmz-related-posts-restapi.php*
+
+```php
+function kmzrelrest_get_json_query(){
+    $cats = get_the_category();
+    $cat_ids = array();
+    foreach( $cats as $cat ) {
+        $cat_ids[] = $cat->term_id;
+    }
+
+    $args = array(
+        'categories' => implode(",", $cat_ids),
+        'per_page' => 5,
+        '_embed' => true
+    );
+
+    $url = add_query_arg( $args, rest_url('wp/v2/posts') );
+
+    return $url;
+}
+```
+
+И теперь осталось вывести имя автора при AJAX запросе:
+
+*wp-content/plugins/kmz-related-posts-restapi/js/script.js*
+
+```js
+.done(function(response){
+    console.log(response);
+    // Loop throught each of the related posts
+    $.each(response, function(index, object){
+        // Set up HTML to be added
+        var related_loop =  '<aside class="related-post clear">' +
+                            '<a href="' + object.link + '">' +
+                            '<h3 class="related-post-title">' + object.title.rendered + '</h3>' +
+                            '<p class="related-author">by <em>' + object._embedded.author[0].name + '</em></p>' +
+                            '<div class="related-excerpt">' +
+                            object.excerpt.rendered +
+                            '</div>' +
+                            '</a>' +
+                            '</aside>';
+
+        // Append HTML to existing content
+        $('#related-posts').append(related_loop);
+    });
+})
+```

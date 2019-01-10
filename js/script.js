@@ -18,6 +18,7 @@
                 var related_loop =  '<aside class="related-post clear">' +
                                     '<a href="' + object.link + '">' +
                                     '<h3 class="related-post-title">' + object.title.rendered + '</h3>' +
+                                    '<p class="related-author">by <em>' + object._embedded.author[0].name + '</em></p>' +
                                     '<div class="related-excerpt">' +
                                     object.excerpt.rendered +
                                     '</div>' +

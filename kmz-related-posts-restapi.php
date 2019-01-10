@@ -63,7 +63,8 @@ function kmzrelrest_get_json_query(){
 
     $args = array(
         'categories' => implode(",", $cat_ids),
-        'per_page' => 5
+        'per_page' => 5,
+        '_embed' => true
     );
 
     $url = add_query_arg( $args, rest_url('wp/v2/posts') );
