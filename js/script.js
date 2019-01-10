@@ -3,6 +3,7 @@
         event.preventDefault();
         
         $('.ajax-loader').show();
+        $('a.get-related-posts').hide();
 
         var jsonUrl = postdata.json_url;
         var postId = postdata.post_id;
@@ -14,9 +15,11 @@
         })
 
         .done(function(response){
-            console.log(response);
+            $('#related-posts').append('<h2>Related Posts:</h2>');
+            // console.log(response);
             // Loop throught each of the related posts
             $.each(response, function(index, object){
+                if(object.id == postId) return;
                 function get_featured_image(){
                     var feat_img;
                     if(object.featured_media == 0){
@@ -44,11 +47,9 @@
         })
 
         .fail(function(){
-            console.log('Sorry, AJAX request failed!');
         })
 
         .always(function(){
-            console.log('Complete!');
         });
 
     })

@@ -5,6 +5,11 @@
     border: 1px solid #ededed;
 }
 
+.related-posts h2{
+    font-weight: bold;
+    padding: 0;
+}
+
 .related-posts a {
     display: block;
     margin-bottom: 2em;
