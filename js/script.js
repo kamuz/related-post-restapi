@@ -1,6 +1,9 @@
 (function($){
     $('.get-related-posts').on('click', function(event){
         event.preventDefault();
+        
+        $('.ajax-loader').show();
+
         var jsonUrl = postdata.json_url;
         var postId = postdata.post_id;
 
@@ -34,7 +37,7 @@
                                     '</div>' +
                                     '</a>' +
                                     '</aside>';
-
+                $('.ajax-loader').hide();
                 // Append HTML to existing content
                 $('#related-posts').append(related_loop);
             });

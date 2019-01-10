@@ -421,3 +421,63 @@ $.each(response, function(index, object){
     $('#related-posts').append(related_loop);
 });
 ```
+
+У нас есть спиннер, который пока скрыт через CSS, мы же через JavaScript сначала его покажем, а потом скроем:
+
+```js
+(function($){
+    $('.get-related-posts').on('click', function(event){
+        event.preventDefault();
+        
+        $('.ajax-loader').show();
+
+        var jsonUrl = postdata.json_url;
+        var postId = postdata.post_id;
+
+        // The AJAX request
+        $.ajax({
+            dataType: 'json',
+            url: jsonUrl
+        })
+
+        .done(function(response){
+            console.log(response);
+            // Loop throught each of the related posts
+            $.each(response, function(index, object){
+                function get_featured_image(){
+                    var feat_img;
+                    if(object.featured_media == 0){
+                        feat_img = '';
+                    } else {
+                        feat_img = '<figure class="related-featured"><img src="' + object._embedded['wp:featuredmedia'][0].media_details.sizes.thumbnail.source_url + '" alt="' + object.title.rendered +'"></figure>';
+                    }
+                    return feat_img;
+                }
+                // Set up HTML to be added
+                var related_loop =  '<aside class="related-post clear">' +
+                                    '<a href="' + object.link + '">' +
+                                    '<h3 class="related-post-title">' + object.title.rendered + '</h3>' +
+                                    '<p class="related-author">by <em>' + object._embedded.author[0].name + '</em></div>' +
+                                    '<div class="related-excerpt">' +
+                                    get_featured_image() + 
+                                    object.excerpt.rendered +
+                                    '</div>' +
+                                    '</a>' +
+                                    '</aside>';
+                $('.ajax-loader').hide();
+                // Append HTML to existing content
+                $('#related-posts').append(related_loop);
+            });
+        })
+
+        .fail(function(){
+            console.log('Sorry, AJAX request failed!');
+        })
+
+        .always(function(){
+            console.log('Complete!');
+        });
+
+    })
+})(jQuery);
+```
