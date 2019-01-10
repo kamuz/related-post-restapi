@@ -19,7 +19,7 @@
                     if(object.featured_media == 0){
                         feat_img = '';
                     } else {
-                        feat_img = '<img src="' + object._embedded['wp:featuredmedia'][0].media_details.sizes.thumbnail.source_url + '">'
+                        feat_img = '<figure class="related-featured"><img src="' + object._embedded['wp:featuredmedia'][0].media_details.sizes.thumbnail.source_url + '" alt="' + object.title.rendered +'"></figure>';
                     }
                     return feat_img;
                 }
@@ -29,9 +29,7 @@
                                     '<h3 class="related-post-title">' + object.title.rendered + '</h3>' +
                                     '<p class="related-author">by <em>' + object._embedded.author[0].name + '</em></div>' +
                                     '<div class="related-excerpt">' +
-                                    '<figure class="related-featured">' +
                                     get_featured_image() + 
-                                    '</figure>' +
                                     object.excerpt.rendered +
                                     '</div>' +
                                     '</a>' +

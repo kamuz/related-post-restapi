@@ -395,27 +395,29 @@ function kmzrelrest_get_json_query(){
 *wp-content/plugins/kmz-related-posts-restapi/js/script.js*
 
 ```js
-function get_featured_image(){
-    var feat_img;
-    if(object.featured_media == 0){
-        feat_img = '';
-    } else {
-        feat_img = '<img src="' + object._embedded['wp:featuredmedia'][0].media_details.sizes.thumbnail.source_url + '">'
+$.each(response, function(index, object){
+    function get_featured_image(){
+        var feat_img;
+        if(object.featured_media == 0){
+            feat_img = '';
+        } else {
+            feat_img = '<figure class="related-featured"><img src="' + object._embedded['wp:featuredmedia'][0].media_details.sizes.thumbnail.source_url + '" alt="' + object.title.rendered +'"></figure>';
+        }
+        return feat_img;
     }
-    return feat_img;
-}
-// Set up HTML to be added
-var related_loop =  '<aside class="related-post clear">' +
-                    '<a href="' + object.link + '">' +
-                    '<h3 class="related-post-title">' + object.title.rendered + '</h3>' +
-                    '<p class="related-author">by <em>' + object._embedded.author[0].name + '</em></div>' +
-                    '<div class="related-excerpt">' +
-                    '<figure class="related-featured">' +
-                    get_featured_image() + 
-                    '</figure>' +
-                    object.excerpt.rendered +
-                    '</div>' +
-                    '</a>' +
-                    '</aside>'
-                    //..
+    // Set up HTML to be added
+    var related_loop =  '<aside class="related-post clear">' +
+                        '<a href="' + object.link + '">' +
+                        '<h3 class="related-post-title">' + object.title.rendered + '</h3>' +
+                        '<p class="related-author">by <em>' + object._embedded.author[0].name + '</em></div>' +
+                        '<div class="related-excerpt">' +
+                        get_featured_image() + 
+                        object.excerpt.rendered +
+                        '</div>' +
+                        '</a>' +
+                        '</aside>';
+
+    // Append HTML to existing content
+    $('#related-posts').append(related_loop);
+});
 ```
